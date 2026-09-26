@@ -1,51 +1,20 @@
 class Solution {
 public:
-    int f(int ind, int prev, vector<int>& nums, vector<vector<int>>& dp) {
-        if (ind == nums.size())
-            return 0;
-        if (dp[ind][prev + 1] != -1)
-            return dp[ind][prev + 1];
-        // not take
-        int len = 0;
-        len = 0 + f(ind + 1, prev, nums, dp);
-        // take
-        if (prev == -1 || nums[ind] > nums[prev]) {
-
-            len = max(len, 1 + f(ind + 1, ind, nums, dp));
-        }
-        return dp[ind][prev + 1] = len;
-    }
     int lengthOfLIS(vector<int>& nums) {
-        int n = nums.size();
-        // vector<vector<int>> dp(n + 1, vector<int>(n + 1, 0));
-        // vector<int>next(n+1, 0);
-        // vector<int>curr(n+1, 0);
-        // for (int ind = n - 1; ind >= 0; ind--) {
-        //     for (int prev_ind = ind - 1; prev_ind >= -1; prev_ind--) {
-        //         int len = 0 + next[prev_ind+1];
-        //         // take
-        //         if (prev_ind == -1 || nums[ind] > nums[prev_ind]) {
-
-        //             len = max(len, 1 + next[ind+1]);
-        //         }
-        //         curr[prev_ind + 1] = len;
-        //     }
-        //     next = curr;
-        // }
-        // return next[-1+1];
-        vector<int>dp(n,1);
-        int maxi = 1;
-        for(int i = 0 ; i<n ; i++)
+        vector<int>arr=nums;
+        vector<int>temp;
+        temp.push_back(arr[0]);
+        for(int i=1;i<arr.size();i++ )
         {
-            for(int prev = 0 ; prev<i ; prev++)
+            if(arr[i]>temp.back())
             {
-                if(nums[prev]<nums[i])
-                {
-                    dp[i] = max(dp[i],1+dp[prev]);
-                }
+                temp.push_back(arr[i]);
             }
-            maxi = max(maxi , dp[i]);
+            else{
+                int ind=lower_bound(temp.begin(),temp.end(),arr[i])-temp.begin();
+                temp[ind]=arr[i];
+            }
         }
-        return maxi;
+        return temp.size();
     }
 };
